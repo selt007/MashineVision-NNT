@@ -6,7 +6,9 @@ namespace NNTSearchChar
 {
     class NNT1
     {
+
     }
+
     // Структура дря разбиения переменных типа int и double на байты
     [StructLayout(LayoutKind.Explicit)]
     internal class DataToByte
@@ -83,7 +85,6 @@ namespace NNTSearchChar
             get { return Weights[row, col]; }
             set { Weights[row, col] = value; }
         }
-
     }
 
     // Класс - нейронная сеть
@@ -207,8 +208,6 @@ namespace NNTSearchChar
                     {
                         WriteInArray(binNW, ref k, Layers[r][p, q]);
                     }
-
-
             File.WriteAllBytes(FileName, binNW);
         }
 
@@ -224,7 +223,6 @@ namespace NNTSearchChar
             {
                 outY[i] = NETOUT[jLayer][i];
             }
-
         }
 
         // Возвращает значение НС
@@ -242,7 +240,6 @@ namespace NNTSearchChar
             {
                 kErr += Math.Pow(Y[i] - NETOUT[countLayers][i], 2);
             }
-
             return 0.5 * kErr;
         }
 
@@ -278,7 +275,6 @@ namespace NNTSearchChar
                 }
                 if (k > 0)
                 {
-
                     // Вычисляем дельта слоя к-1
                     for (int j = 0; j < Layers[k - 1].countY; j++)
                     {
@@ -293,7 +289,6 @@ namespace NNTSearchChar
                     }
                 }
             }
-
             return CalcError(X, Y);
         }
 
@@ -339,7 +334,6 @@ namespace NNTSearchChar
 
                 }
             }
-
         }
 
         // Возвращает все значения нейронов всех слоев
@@ -418,6 +412,5 @@ namespace NNTSearchChar
 
             return DTB.vDouble;
         }
-
     }
 }
