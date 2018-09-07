@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.picture1 = new System.Windows.Forms.PictureBox();
             this.button = new System.Windows.Forms.Button();
             this.picture2 = new System.Windows.Forms.PictureBox();
@@ -39,20 +40,21 @@
             // 
             this.picture1.BackColor = System.Drawing.Color.White;
             this.picture1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picture1.Location = new System.Drawing.Point(13, 13);
+            this.picture1.Location = new System.Drawing.Point(22, 21);
             this.picture1.Name = "picture1";
             this.picture1.Size = new System.Drawing.Size(192, 192);
             this.picture1.TabIndex = 0;
             this.picture1.TabStop = false;
+            this.picture1.Visible = false;
             this.picture1.Paint += new System.Windows.Forms.PaintEventHandler(this.picture1_Paint);
             this.picture1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picture1_MouseDown);
             this.picture1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picture1_MouseMove);
             // 
             // button
             // 
-            this.button.Location = new System.Drawing.Point(211, 320);
+            this.button.Location = new System.Drawing.Point(12, 317);
             this.button.Name = "button";
-            this.button.Size = new System.Drawing.Size(302, 39);
+            this.button.Size = new System.Drawing.Size(300, 63);
             this.button.TabIndex = 1;
             this.button.Text = "Тест";
             this.button.UseVisualStyleBackColor = true;
@@ -61,9 +63,9 @@
             // picture2
             // 
             this.picture2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picture2.Location = new System.Drawing.Point(211, 12);
+            this.picture2.Location = new System.Drawing.Point(12, 12);
             this.picture2.Name = "picture2";
-            this.picture2.Size = new System.Drawing.Size(302, 302);
+            this.picture2.Size = new System.Drawing.Size(300, 299);
             this.picture2.TabIndex = 2;
             this.picture2.TabStop = false;
             // 
@@ -71,11 +73,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(525, 369);
+            this.ClientSize = new System.Drawing.Size(324, 392);
+            this.Controls.Add(this.picture1);
             this.Controls.Add(this.picture2);
             this.Controls.Add(this.button);
-            this.Controls.Add(this.picture1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";

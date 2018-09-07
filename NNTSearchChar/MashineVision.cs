@@ -1,28 +1,13 @@
-﻿using Emgu.CV;
-using Emgu.CV.Structure;
-using System;
+﻿using System;
 using System.Drawing;
-using System.Windows.Forms;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
 
 namespace NNTSearchChar
 {
     class MashineVision
     {
-        //private Capture capture = new Capture();
-        public Bitmap imgOut;
-
-        public void ImageOut()
-        {
-            HaarCascade faceCascade = new HaarCascade("haarcascade_frontalface_alt.xml");
-            Image<Bgr, byte> image = new Image<Bgr, byte>(new Bitmap("photo.jpg"));//capture.QueryFrame();
-            Image<Gray, byte> grayImage = image.Convert<Gray, byte>();
-
-            var Face = faceCascade.Detect(grayImage);
-            foreach (var face in Face)
-                image.Draw(face.rect, new Bgr(255, 255, 255), 10);
-            imgOut = image.Bitmap;
-        }
-
         public static void ColToHSV(Color col, out double h, out double s, out double v)
         {
             double 
@@ -49,12 +34,6 @@ namespace NNTSearchChar
                 h = 60 * ((r - g) / (max - min)) + 240;
 
             s = (max == 0) ? 0 : 1d - (1d * min / max);
-            
-            //if (h >= 180) h = h - 180;
-            //if (h < 180) h = h + 180;
-
-            //s = v * s / v * (s - 1) + 1;
-            //v = v * (s - 1) + 1;
         }
 
         public static Color ColFromHSV(double hue, double saturation, double value)
@@ -83,6 +62,33 @@ namespace NNTSearchChar
                     return Color.FromArgb(255, (int)value, (int)vinc, (int)vmin);
                 default:
                     return Color.FromArgb(255, 255, 255, 255);
+            }
+        }
+
+        public Image CheckFace(Bitmap bmp)
+        {
+            HaarCascade haar = new HaarCascade("haarcascade_frontalface_alt2.xml");
+            //Capture cap = null;
+
+            using (Image<Bgr, byte> nextFrame = new Image<Bgr, byte>(bmp))// image --> cap.QueryFrame() for webcam
+            {
+                if (nextFrame != null)
+                {
+                    // there's only one channel (greyscale), hence the zero index
+                    //var faces = nextFrame.DetectHaarCascade(haar)[0];
+                    Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
+                    var faces =
+                            grayframe.DetectHaarCascade(
+                                    haar, 1.4, 4,
+                                    HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
+                                    new Size(nextFrame.Width / 8, nextFrame.Height / 8)
+                                    )[0];
+                    foreach (var face in faces)
+                    {
+                        nextFrame.Draw(face.rect, new Bgr(0, double.MaxValue, 0), 3);
+                    }
+                }
+                return nextFrame.ToBitmap();
             }
         }
     }
