@@ -3,6 +3,7 @@ using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
+using System.Windows.Forms;
 
 namespace NNTSearchChar
 {
@@ -65,30 +66,45 @@ namespace NNTSearchChar
             }
         }
 
-        public Image CheckFace(Bitmap bmp)
+        public Image FaceDetect(HaarCascade haar, Image<Bgr, byte> img, Bitmap bmp = null)
         {
-            HaarCascade haar = new HaarCascade("haarcascade_frontalface_alt2.xml");
-            //Capture cap = null;
+            var obj = img;
+            if (bmp != null) obj = new Image<Bgr, byte>(bmp);
 
-            using (Image<Bgr, byte> nextFrame = new Image<Bgr, byte>(bmp))// image --> cap.QueryFrame() for webcam
+            using (Image<Bgr, byte> nextFrame = obj)
             {
                 if (nextFrame != null)
                 {
-                    // there's only one channel (greyscale), hence the zero index
-                    //var faces = nextFrame.DetectHaarCascade(haar)[0];
                     Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
                     var faces =
                             grayframe.DetectHaarCascade(
-                                    haar, 1.4, 4,
-                                    HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                                    new Size(nextFrame.Width / 8, nextFrame.Height / 8)
+                                    haar, 1.1, 3,
+                                    HAAR_DETECTION_TYPE.DEFAULT,
+                                    new Size(nextFrame.Width / 4, nextFrame.Height / 8)
                                     )[0];
                     foreach (var face in faces)
-                    {
                         nextFrame.Draw(face.rect, new Bgr(0, double.MaxValue, 0), 3);
-                    }
                 }
                 return nextFrame.ToBitmap();
+            }
+        }
+
+        public void FaceDetectSave(HaarCascade haar, Image<Bgr, byte> img, string ID, int count)
+        {
+            using (Image<Bgr, byte> nextFrame = img)
+            {
+                if (nextFrame != null)
+                {
+                    Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
+                    var faces = 
+                            grayframe.DetectHaarCascade(
+                                    haar, 1.1, 3,
+                                    HAAR_DETECTION_TYPE.DEFAULT,
+                                    new Size(nextFrame.Width / 4, nextFrame.Height / 8)
+                                    )[0];
+                    foreach (var face in faces)
+                        grayframe.Save($"photo\\dataset\\user.{ID}.{count}.png");
+                }
             }
         }
     }

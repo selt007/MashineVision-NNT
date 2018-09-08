@@ -32,6 +32,7 @@
             this.picture1 = new System.Windows.Forms.PictureBox();
             this.button = new System.Windows.Forms.Button();
             this.picture2 = new System.Windows.Forms.PictureBox();
+            this.textFaceId = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.picture1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picture2)).BeginInit();
             this.SuspendLayout();
@@ -52,9 +53,11 @@
             // 
             // button
             // 
-            this.button.Location = new System.Drawing.Point(12, 317);
+            this.button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button.Location = new System.Drawing.Point(12, 342);
             this.button.Name = "button";
-            this.button.Size = new System.Drawing.Size(300, 63);
+            this.button.Size = new System.Drawing.Size(300, 38);
             this.button.TabIndex = 1;
             this.button.Text = "Тест";
             this.button.UseVisualStyleBackColor = true;
@@ -69,11 +72,22 @@
             this.picture2.TabIndex = 2;
             this.picture2.TabStop = false;
             // 
+            // textFaceId
+            // 
+            this.textFaceId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textFaceId.Location = new System.Drawing.Point(12, 316);
+            this.textFaceId.Name = "textFaceId";
+            this.textFaceId.Size = new System.Drawing.Size(300, 20);
+            this.textFaceId.TabIndex = 3;
+            this.textFaceId.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(324, 392);
+            this.Controls.Add(this.textFaceId);
             this.Controls.Add(this.picture1);
             this.Controls.Add(this.picture2);
             this.Controls.Add(this.button);
@@ -87,6 +101,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.picture1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picture2)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -95,6 +110,7 @@
         private System.Windows.Forms.PictureBox picture1;
         private System.Windows.Forms.Button button;
         private System.Windows.Forms.PictureBox picture2;
+        private System.Windows.Forms.TextBox textFaceId;
     }
 }
 
