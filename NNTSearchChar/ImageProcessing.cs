@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Drawing;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Emgu.CV.CvEnum;
-using System.Windows.Forms;
 
 namespace NNTSearchChar
 {
-    class MashineVision
+    class ImageProcessing
     {
         public static void ColToHSV(Color col, out double h, out double s, out double v)
         {
@@ -63,48 +59,6 @@ namespace NNTSearchChar
                     return Color.FromArgb(255, (int)value, (int)vinc, (int)vmin);
                 default:
                     return Color.FromArgb(255, 255, 255, 255);
-            }
-        }
-
-        public Image FaceDetect(HaarCascade haar, Image<Bgr, byte> img, Bitmap bmp = null)
-        {
-            var obj = img;
-            if (bmp != null) obj = new Image<Bgr, byte>(bmp);
-
-            using (Image<Bgr, byte> nextFrame = obj)
-            {
-                if (nextFrame != null)
-                {
-                    Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
-                    var faces =
-                            grayframe.DetectHaarCascade(
-                                    haar, 1.1, 3,
-                                    HAAR_DETECTION_TYPE.DEFAULT,
-                                    new Size(nextFrame.Width / 4, nextFrame.Height / 8)
-                                    )[0];
-                    foreach (var face in faces)
-                        nextFrame.Draw(face.rect, new Bgr(0, double.MaxValue, 0), 3);
-                }
-                return nextFrame.ToBitmap();
-            }
-        }
-
-        public void FaceDetectSave(HaarCascade haar, Image<Bgr, byte> img, string ID, int count)
-        {
-            using (Image<Bgr, byte> nextFrame = img)
-            {
-                if (nextFrame != null)
-                {
-                    Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
-                    var faces = 
-                            grayframe.DetectHaarCascade(
-                                    haar, 1.1, 3,
-                                    HAAR_DETECTION_TYPE.DEFAULT,
-                                    new Size(nextFrame.Width / 4, nextFrame.Height / 8)
-                                    )[0];
-                    foreach (var face in faces)
-                        grayframe.Save($"photo\\dataset\\user.{ID}.{count}.png");
-                }
             }
         }
     }

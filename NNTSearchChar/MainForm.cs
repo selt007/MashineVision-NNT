@@ -7,26 +7,28 @@ namespace NNTSearchChar
 {
     public partial class MainForm : Form
     {
-        HaarCascade haar = new HaarCascade(@"haarcascades\haarcascade_frontalface_default.xml");
-        MashineVision MV = new MashineVision();
+        HaarCascade haar = new HaarCascade(Config.HaarCascadePath);
+        FaceRecognition fr = new FaceRecognition();
         Point CurrentPoint;
         Graphics g;
         Timer t = new Timer();
         Timer t2 = new Timer();
-        Capture cap = new Capture(0);
+        Capture cap = new Capture(Config.ActiveCameraIndex);
         Bitmap bmap, stBm;
+        bool timerStart = false;
 
         public MainForm()
         {
             InitializeComponent();
-            textFaceId.SetWatermark("Write ID...");
+            textFaceId.SetWatermark("Write user name...");
             bmap = new Bitmap(picture1.Width, picture1.Height);
             picture1.MouseDown += picture1_MouseDown;
             picture1.Paint += picture1_Paint;
             g = picture1.CreateGraphics();
 
             picture2.Image = ImageResize.ResizeOrigImg(
-             new Bitmap(Image.FromFile(@"photo\photo.jpg")), 400, 300);
+             new Bitmap(Image.FromFile($"{Application.StartupPath}\\" +
+             $"photo\\photo.jpg")), 400, 300);
             stBm = new Bitmap(picture2.Image);
 
             picture2.Width = cap.Width;
@@ -35,29 +37,46 @@ namespace NNTSearchChar
             Height = cap.Height + 135;
 
             t.Interval = 110;
-            t.Tick += (s, e) => {
-                picture2.Image = MV.FaceDetect(haar,
-                    cap.QueryFrame());
+            t.Tick += (s, ea) => {
+                picture2.Image = fr.FaceDetect(haar,
+                    cap.QueryFrame(), stBm);
             };
             t.Start();
         }
 
         private void button_Click(object sender, EventArgs e)
         {
-            int count = 1;
+            int count = 0;
 
-            t2.Interval = 400;
+            t2.Interval = Config.TimerResponseValue;
             t2.Tick += (s, ea) => {
                 if (count == 15)
                 {
                     t2.Stop();
-                    MessageBox.Show("Done!");
+                    timerStart = false;
+                    progressBar.Value = progressBar.Maximum;
+                    MessageBox.Show($"User {textFaceId.Text} save in datebase!", "Done!", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    progressBar.Value = progressBar.Minimum;
                 }
-                MV.FaceDetectSave(haar, 
-                    cap.QueryFrame(), textFaceId.Text, count);
-                count++;
+                else
+                {
+                    fr.FaceDataset(haar,
+                        cap.QueryFrame(), textFaceId.Text, count + 1, stBm);
+                    count++;
+                    progressBar.Value += 1;
+                }
             };
-            t2.Start();
+            if (!timerStart)
+                t2.Start();
+        }
+
+        private void buttonTrain_Click(object sender, EventArgs e)
+        {
+            string msg = string.Empty;
+            foreach (var n in fr.FaceTrain(haar, textFaceId.Text))
+                msg += n + "\n";
+            MessageBox.Show(msg);
         }
 
         private void picture1_MouseMove(object sender, MouseEventArgs e)
@@ -94,8 +113,8 @@ namespace NNTSearchChar
                 {
                     try
                     {
-                        MashineVision.ColToHSV(bm.GetPixel(i, j), out hue, out sat, out val);
-                        bm.SetPixel(i, j, MashineVision.ColFromHSV(hue, sat, val));
+                        ImageProcessing.ColToHSV(bm.GetPixel(i, j), out hue, out sat, out val);
+                        bm.SetPixel(i, j, ImageProcessing.ColFromHSV(hue, sat, val));
                     }
                     catch (ArgumentException ex)
                     {
