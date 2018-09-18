@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{84658C1C-70FA-4A2E-9B56-BCFA26FA9635}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>NNTSearchChar</RootNamespace>
-    <AssemblyName>NNTSearchChar</AssemblyName>
+    <RootNamespace>MashineVisionNNT</RootNamespace>
+    <AssemblyName>MashineVision-NNT</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -112,6 +112,10 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <Compile Include="MainForm.PaintChar.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

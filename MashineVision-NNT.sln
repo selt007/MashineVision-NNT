@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NNTSearchChar", "NNTSearchChar\NNTSearchChar.csproj", "{84658C1C-70FA-4A2E-9B56-BCFA26FA9635}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MashineVision-NNT", "NNTSearchChar\MashineVision-NNT.csproj", "{84658C1C-70FA-4A2E-9B56-BCFA26FA9635}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
