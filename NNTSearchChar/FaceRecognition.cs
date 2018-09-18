@@ -4,13 +4,14 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 
 namespace NNTSearchChar
 {
     class FaceRecognition
     {
-        List<string> lList = new List<string>();
+        private List<string> lList = new List<string>();
+        private List<Image<Gray, byte>> imgList = new List<Image<Gray, byte>>();
+        private Image<Gray, byte> detectedFace = null;
         /// <summary>
         ///     Call face detect and draw image with face and rectangle.
         /// </summary>
@@ -53,15 +54,21 @@ namespace NNTSearchChar
             {
                 if (nextFrame != null)
                 {
-                    Image<Gray, byte> grayframe = nextFrame.Convert<Gray, byte>();
+                    detectedFace = nextFrame.Convert<Gray, byte>();
                     var faces =
-                            grayframe.DetectHaarCascade(
+                            detectedFace.DetectHaarCascade(
                                     haar, 1.1, 3,
                                     HAAR_DETECTION_TYPE.DEFAULT,
                                     new Size(nextFrame.Width / 4, nextFrame.Height / 8)
                                     )[0];
                     foreach (var face in faces)
-                        grayframe.Save($"{Config.FacePhotosPath}user_{ID}-{count}{Config.ImageFileExtension}");
+                    {
+                        detectedFace = detectedFace.Resize(100, 100, INTER.CV_INTER_CUBIC);
+                        detectedFace.Save($"{Config.FacePhotosPath}user_{ID}-{count}{Config.ImageFileExtension}");
+                        StreamWriter writer = new StreamWriter(Config.FaceListTextFile, true);
+                        writer.WriteLine($"user: {ID} - {count}");
+                        writer.Close();
+                    }
                 }
             }
         }
@@ -70,23 +77,29 @@ namespace NNTSearchChar
         /// </summary>
         /// <param name="haar">Field for using cascade Haar.</param>
         /// <param name="nameUser">Set here user name for saving face in dataset.</param>
-        public List<string> FaceTrain(HaarCascade haar, string nameUser)
+        public void FaceTrain(HaarCascade haar, string nameUser)
         {
-            var allPhotos = Directory.GetFiles(Config.FacePhotosPath);
-            foreach (string photo in allPhotos)
+            var photos = Directory.GetFiles(Config.FacePhotosPath);
+
+            foreach (string photo in photos)
             {
                 int subsEnd = (Config.FacePhotosPath + "user_" + nameUser).Length;
                 int subsStart = (Config.FacePhotosPath + "user_").Length;
 
                 string name = photo.Substring(0, subsEnd).Substring(subsStart);
                 if(name == nameUser)
+                {
+                    Bitmap bmp = new Bitmap(Image.FromFile(photo));
+                    Image<Gray, byte> img = new Image<Gray, byte>(bmp);
+
                     lList.Add(photo);
+                    imgList.Add(img);
+                }
             }
 
             MCvTermCriteria termCrit = new MCvTermCriteria(lList.Count, 0.001);
-            //EigenObjectRecognizer recognizer = new EigenObjectRecognizer(imageList.ToArray(), lList.ToArray(), 3000, ref termCrit);
-
-            return lList;
+            EigenObjectRecognizer recognizer = new EigenObjectRecognizer(imgList.ToArray(), lList.ToArray(), 3000, ref termCrit);
+            string faceName = recognizer.Recognize(detectedFace.Resize(100, 100, INTER.CV_INTER_CUBIC));
         }
     }
 }
