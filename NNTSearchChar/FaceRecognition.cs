@@ -64,7 +64,7 @@ namespace NNTSearchChar
                     foreach (var face in faces)
                     {
                         detectedFace = detectedFace.Resize(100, 100, INTER.CV_INTER_CUBIC);
-                        detectedFace.Save($"{Config.FacePhotosPath}user_{ID}-{count}{Config.ImageFileExtension}");
+                        detectedFace.Save($"{Config.FacePhotosPath}user {ID}-{count}{Config.ImageFileExtension}");
                         StreamWriter writer = new StreamWriter(Config.FaceListTextFile, true);
                         writer.WriteLine($"user: {ID} - {count}");
                         writer.Close();
@@ -83,8 +83,8 @@ namespace NNTSearchChar
 
             foreach (string photo in photos)
             {
-                int subsEnd = (Config.FacePhotosPath + "user_" + nameUser).Length;
-                int subsStart = (Config.FacePhotosPath + "user_").Length;
+                int subsEnd = (Config.FacePhotosPath + "user " + nameUser).Length;
+                int subsStart = (Config.FacePhotosPath + "user ").Length;
 
                 string name = photo.Substring(0, subsEnd).Substring(subsStart);
                 if(name == nameUser)

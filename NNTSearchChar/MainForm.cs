@@ -16,6 +16,7 @@ namespace NNTSearchChar
         Capture cap = new Capture(Config.ActiveCameraIndex);
         Bitmap bmap, stBm;
         bool timerStart = false;
+        static int count = 0x0;
 
         public MainForm()
         {
@@ -46,7 +47,7 @@ namespace NNTSearchChar
 
         private void button_Click(object sender, EventArgs e)
         {
-            int count = 0;
+            count = 0;
 
             t2.Interval = Config.TimerResponseValue;
             t2.Tick += (s, ea) => {
@@ -58,6 +59,7 @@ namespace NNTSearchChar
                     MessageBox.Show($"User {textFaceId.Text} save in datebase!", "Done!", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     progressBar.Value = progressBar.Minimum;
+                    textFaceId.Text = string.Empty;
                 }
                 else
                 {
@@ -73,10 +75,8 @@ namespace NNTSearchChar
 
         private void buttonTrain_Click(object sender, EventArgs e)
         {
-            string msg = string.Empty;
-            foreach (var n in fr.FaceTrain(haar, textFaceId.Text))
-                msg += n + "\n";
-            MessageBox.Show(msg);
+            MessageBox.Show($"This button in stage development! \nWith love <3 \n©Sash", "Sorry",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void picture1_MouseMove(object sender, MouseEventArgs e)
